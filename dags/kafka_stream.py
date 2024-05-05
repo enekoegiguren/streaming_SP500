@@ -44,6 +44,10 @@ def manipulate_data(data):
 
 
 def stream_data():
+    
+    from kafka import KafkaProducer
+    import time
+    
     sp500_data = get_sp500_data()
     manipulated_data = manipulate_data(sp500_data)
     
@@ -59,10 +63,15 @@ def stream_data():
     }
     
     #res = json.dumps(data_dict)
-    print(json.dumps(data_dict, indent=3))
+    #print(json.dumps(data_dict, indent=3))
     #return res
     #print(json.dumps(data_dict, indent=3))
 
+    producer = KafkaProducer(bootstrap_servers = ['localhost:9092'], max_block_ms = 5000)
+    
+    producer.send('users_created', json.dumps(data_dict).encode('utf-8'))
+    
+    
     
 
 
